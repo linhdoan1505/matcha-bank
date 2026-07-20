@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matcha Studio · Matcha Bar Studio</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="page">
+  <nav class="navbar">
+    <div class="brand"><span class="logo-dot"></span> Matcha Bar Studio</div>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="studio.html" class="active">Studio</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="gallery.html">Profile</a>
+    </div>
+    <a href="studio.html" class="btn btn-primary">Start Mixing</a>
+  </nav>
+
+  <div class="studio-header">
+    <div>
+      <h2 style="margin:0;">Matcha Studio</h2>
+      <p>Drag ingredients into your cup to build your perfect drink</p>
+    </div>
+    <div class="studio-actions">
+      <button class="btn btn-outline" id="resetBtn">↺ Reset</button>
+      <button class="btn btn-primary" id="saveBtn">💾 Save Recipe</button>
+      <button class="btn btn-secondary" id="shareBtn">📤 Share</button>
+    </div>
+  </div>
+
+  <div class="studio-grid">
+    <!-- Ingredient bar -->
+    <div>
+      <div class="panel-title">Ingredient Bar</div>
+      <div class="category-tabs" id="categoryTabs">
+        <button data-cat="base" class="active">🍵 Base</button>
+        <button data-cat="milk">🥛 Milk</button>
+        <button data-cat="sweet">🍯 Sweet</button>
+        <button data-cat="syrup">💧 Syrup</button>
+        <button data-cat="topping">🍥 Topping</button>
+        <button data-cat="ice">🧊 Ice</button>
+        <button data-cat="fruit">🍓 Fruit</button>
+      </div>
+      <div class="ingredient-list" id="ingredientList"></div>
+      <div class="barista-notes" id="baristaNotes">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <strong style="font-size:0.85rem;">ⓘ Barista Notes</strong>
+        </div>
+        <p style="color:var(--text-muted); margin:6px 0 0;">Hover an ingredient or add one to your cup to see tasting notes.</p>
+      </div>
+    </div>
+
+    <!-- Cup -->
+    <div class="cup-column">
+      <div class="panel-title">Your Cup</div>
+      <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:10px;" id="ingredientCount">Empty</div>
+      <div class="cup-drop" id="cupDrop">
+        <div class="cup-empty" id="cupEmpty">Drag ingredients here</div>
+      </div>
+      <input type="text" class="creation-name" id="creationName" placeholder="Name your creation...">
+    </div>
+
+    <!-- Drink profile -->
+    <div>
+      <div class="panel-title">Drink Profile</div>
+      <div class="profile-card">
+        <div class="stat-row">
+          <div class="label"><span>☆ Sweetness</span><span id="sweetVal">0.0 / 20</span></div>
+          <div class="track"><div class="fill" id="sweetFill" style="width:0%"></div></div>
+        </div>
+        <div class="stat-row">
+          <div class="label"><span>⚡ Caffeine</span><span id="caffVal">0.0 / 20</span></div>
+          <div class="track"><div class="fill" id="caffFill" style="width:0%"></div></div>
+        </div>
+        <div class="stat-row">
+          <div class="label"><span>🌿 Earthiness</span><span id="earthVal">0.0 / 10</span></div>
+          <div class="track"><div class="fill" id="earthFill" style="width:0%"></div></div>
+        </div>
+        <div class="flavor-chips" id="flavorChips"></div>
+      </div>
+
+      <div class="panel-title">Popular Pairings</div>
+      <div class="pairings-card">
+        <div class="pairing-item"><span class="emoji">🌸</span><div><h5>Kyoto Classic</h5><small>Ceremonial + Oat + Honey</small></div></div>
+        <div class="pairing-item"><span class="emoji">🍓</span><div><h5>Gen Z Dream</h5><small>Culinary + Strawberry + Cold Foam</small></div></div>
+        <div class="pairing-item"><span class="emoji">🍡</span><div><h5>Zen Mode</h5><small>Houjicha + Coconut + Vanilla</small></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/script.js"></script>
+</body>
+</html>
