@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Gallery · Matcha Bar Studio</title>
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
 
@@ -12,12 +12,12 @@
   <nav class="navbar">
     <div class="brand"><span class="logo-dot"></span> Matcha Bar Studio</div>
     <div class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="studio.html">Studio</a>
-      <a href="gallery.html" class="active">Gallery</a>
-      <a href="gallery.html">Profile</a>
+      <a href="{{ url_for('index') }}">Home</a>
+      <a href="{{ url_for('studio') }}">Studio</a>
+      <a href="{{ url_for('gallery') }}" class="active">Gallery</a>
+      <a href="{{ url_for('gallery') }}">Profile</a>
     </div>
-    <a href="studio.html" class="btn btn-primary">Start Mixing</a>
+    <a href="{{ url_for('studio') }}" class="btn btn-primary">Start Mixing</a>
   </nav>
 
   <div class="profile-hero">
@@ -50,12 +50,12 @@
   <section class="block" style="border-top:none;">
     <div class="section-head">
       <h3 style="margin:0;">8 recipes</h3>
-      <a href="studio.html">Create new →</a>
+      <a href="{{ url_for('studio') }}">Create new →</a>
     </div>
     <div class="recipe-grid" id="galleryGrid"></div>
   </section>
 </div>
 
-<script src="js/script.js"></script>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>

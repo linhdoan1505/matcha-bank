@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Matcha Bar Studio</title>
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
 
@@ -12,12 +12,12 @@
   <nav class="navbar">
     <div class="brand"><span class="logo-dot"></span> Matcha Bar Studio</div>
     <div class="nav-links">
-      <a href="index.html" class="active">Home</a>
-      <a href="studio.html">Studio</a>
-      <a href="gallery.html">Gallery</a>
-      <a href="gallery.html">Profile</a>
+      <a href="{{ url_for('index') }}" class="active">Home</a>
+      <a href="{{ url_for('studio') }}">Studio</a>
+      <a href="{{ url_for('gallery') }}">Gallery</a>
+      <a href="{{ url_for('gallery') }}">Profile</a>
     </div>
-    <a href="studio.html" class="btn btn-primary">Start Mixing</a>
+    <a href="{{ url_for('studio') }}" class="btn btn-primary">Start Mixing</a>
   </nav>
 
   <section class="hero">
@@ -52,7 +52,7 @@
         <div class="eyebrow">Community Picks</div>
         <h2>Trending this week</h2>
       </div>
-      <a href="gallery.html">See all →</a>
+      <a href="{{ url_for('gallery') }}">See all →</a>
     </div>
     <div class="recipe-grid">
       <article class="recipe-card">
@@ -124,11 +124,11 @@
       </div>
     </div>
     <div class="steps-cta">
-      <a href="studio.html" class="btn btn-primary">Open the Studio →</a>
+      <a href="{{ url_for('studio') }}" class="btn btn-primary">Open the Studio →</a>
     </div>
   </section>
 </div>
 
-<script src="js/script.js"></script>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>
