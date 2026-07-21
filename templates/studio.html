@@ -58,9 +58,23 @@
     <div class="cup-column">
       <div class="panel-title">Your Cup</div>
       <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:10px;" id="ingredientCount">Empty</div>
-      <div class="cup-drop" id="cupDrop">
-        <div class="cup-empty" id="cupEmpty">Drag ingredients here</div>
+
+      <div class="cup-scene">
+        <div class="straw"></div>
+        <div class="cup-drop" id="cupDrop">
+          <div class="cup-lid"></div>
+          <div class="cup-liquid" id="cupLiquid" style="height:0%;">
+            <div class="liquid-wave"></div>
+            <div class="foam-cap" id="foamCap"></div>
+            <div class="mix-ins" id="mixIns"></div>
+          </div>
+          <div class="cup-shine"></div>
+          <div class="cup-empty" id="cupEmpty">Drag ingredients here</div>
+        </div>
+        <div class="cup-base-shadow"></div>
       </div>
+
+      <div class="cup-recipe-list" id="cupRecipeList"></div>
       <input type="text" class="creation-name" id="creationName" placeholder="Name your creation...">
     </div>
 
