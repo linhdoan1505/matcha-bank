@@ -1,13 +1,10 @@
 import json
 import os
 
-import jwt
-from authlib.integrations.requests_client import OAuth2Session
 from dotenv import load_dotenv
-from flask import Flask, flash, redirect, render_template, request, session, url_for
+from flask import Flask, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 
-from auth_utils import build_apple_client_secret
 from extensions import db, login_manager, oauth
 from models import SavedRecipe, User
 
@@ -37,18 +34,8 @@ if GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET:
         client_kwargs={"scope": "openid email profile"},
     )
 
-APPLE_CLIENT_ID = os.environ.get("APPLE_CLIENT_ID")  # Services ID, e.g. com.matchabar.web
-APPLE_TEAM_ID = os.environ.get("APPLE_TEAM_ID")
-APPLE_KEY_ID = os.environ.get("APPLE_KEY_ID")
-APPLE_PRIVATE_KEY = os.environ.get("APPLE_PRIVATE_KEY", "").replace("\\n", "\n")
-
-
 def google_configured():
     return bool(GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET)
-
-
-def apple_configured():
-    return bool(APPLE_CLIENT_ID and APPLE_TEAM_ID and APPLE_KEY_ID and APPLE_PRIVATE_KEY)
 
 
 def safe_next(target):
@@ -59,7 +46,7 @@ def safe_next(target):
 
 @app.context_processor
 def inject_oauth_flags():
-    return {"google_enabled": google_configured(), "apple_enabled": apple_configured()}
+    return {"google_enabled": google_configured()}
 
 
 @login_manager.user_loader
@@ -171,87 +158,6 @@ def auth_google_callback():
             avatar_url=userinfo.get("picture"),
             provider="google",
             provider_id=userinfo.get("sub"),
-        )
-        db.session.add(user)
-        db.session.commit()
-
-    login_user(user)
-    return redirect(url_for("profile"))
-
-
-# ---- Apple Sign In ----
-@app.route("/login/apple")
-def login_apple():
-    if not apple_configured():
-        flash("Sign in with Apple isn't configured on this deployment yet.", "error")
-        return redirect(url_for("login"))
-
-    client_secret = build_apple_client_secret(APPLE_TEAM_ID, APPLE_CLIENT_ID, APPLE_KEY_ID, APPLE_PRIVATE_KEY)
-    client = OAuth2Session(APPLE_CLIENT_ID, client_secret, scope="name email")
-    redirect_uri = url_for("auth_apple_callback", _external=True)
-    uri, state = client.create_authorization_url(
-        "https://appleid.apple.com/auth/authorize",
-        redirect_uri=redirect_uri,
-        response_mode="form_post",
-    )
-    session["apple_oauth_state"] = state
-    return redirect(uri)
-
-
-@app.route("/auth/apple/callback", methods=["POST"])
-def auth_apple_callback():
-    if not apple_configured():
-        return redirect(url_for("login"))
-
-    code = request.form.get("code")
-    if not code:
-        flash("Apple sign-in was cancelled or failed.", "error")
-        return redirect(url_for("login"))
-
-    client_secret = build_apple_client_secret(APPLE_TEAM_ID, APPLE_CLIENT_ID, APPLE_KEY_ID, APPLE_PRIVATE_KEY)
-    client = OAuth2Session(APPLE_CLIENT_ID, client_secret)
-    redirect_uri = url_for("auth_apple_callback", _external=True)
-    token = client.fetch_token(
-        "https://appleid.apple.com/auth/token",
-        code=code,
-        grant_type="authorization_code",
-        redirect_uri=redirect_uri,
-    )
-
-    id_token = token["id_token"]
-    jwk_client = jwt.PyJWKClient("https://appleid.apple.com/auth/keys")
-    signing_key = jwk_client.get_signing_key_from_jwt(id_token)
-    claims = jwt.decode(
-        id_token,
-        signing_key.key,
-        algorithms=["RS256"],
-        audience=APPLE_CLIENT_ID,
-        issuer="https://appleid.apple.com",
-    )
-
-    email = (claims.get("email") or "").lower()
-    apple_sub = claims.get("sub")
-    if not email:
-        flash("Apple didn't share an email address, so we couldn't sign you in.", "error")
-        return redirect(url_for("login"))
-
-    # Apple only sends the user's name once, on the very first authorization.
-    name = None
-    raw_user = request.form.get("user")
-    if raw_user:
-        try:
-            name_parts = json.loads(raw_user).get("name", {})
-            name = " ".join(filter(None, [name_parts.get("firstName"), name_parts.get("lastName")])) or None
-        except (ValueError, AttributeError):
-            name = None
-
-    user = User.query.filter_by(email=email).first()
-    if not user:
-        user = User(
-            email=email,
-            name=name or email.split("@")[0],
-            provider="apple",
-            provider_id=apple_sub,
         )
         db.session.add(user)
         db.session.commit()
