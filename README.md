@@ -1,4 +1,4 @@
-# 🍵 Matcha Bar Studio
+# 🍵 UR matcha-bank
 
 welcome to your lil corner of the internet where matcha is a personality trait and every drink is a whole *mood*. build your own matcha, mix in the syrups + toppings, flex your recipe in the gallery. that's the app. that's the whole vibe. 🎀
 
