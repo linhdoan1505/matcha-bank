@@ -80,6 +80,7 @@ function initStudio() {
 
   let currentCat = "base";
   let cup = []; // { name, icon, sweet, caff, earth, notes, tags, cat }
+  let lastStats = { sweet: 0, caff: 0, earth: 0 };
 
   function renderIngredients(cat) {
     list.innerHTML = "";
@@ -190,6 +191,7 @@ function initStudio() {
     const sweet = cup.reduce((s, i) => s + i.sweet, 0);
     const caff = cup.reduce((s, i) => s + i.caff, 0);
     const earth = cup.reduce((s, i) => s + i.earth, 0);
+    lastStats = { sweet, caff, earth };
 
     setStat("sweet", sweet, 20);
     setStat("caff", caff, 20);
@@ -237,9 +239,35 @@ function initStudio() {
     renderCup();
   });
 
-  document.getElementById("saveBtn").addEventListener("click", () => {
+  document.getElementById("saveBtn").addEventListener("click", async () => {
     if (!cup.length) { alert("Add some ingredients before saving!"); return; }
     const name = creationName.value.trim() || "My Matcha Creation";
+
+    const res = await fetch("/api/recipes", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name,
+        ingredients: cup,
+        sweetness: lastStats.sweet,
+        caffeine: lastStats.caff,
+        earthiness: lastStats.earth,
+      }),
+    });
+
+    if (res.status === 401) {
+      if (confirm(`Log in to save "${name}" to your profile?`)) {
+        window.location.href = "/login";
+      }
+      return;
+    }
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      alert(err.error || "Couldn't save that recipe, try again.");
+      return;
+    }
+
     alert(`Saved "${name}" with ${cup.length} ingredients to your profile!`);
   });
 
@@ -282,7 +310,21 @@ function initGallery() {
   `).join("");
 }
 
+// ---- Profile page logic ----
+function initProfile() {
+  document.querySelectorAll(".my-recipe-card .delete-recipe").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const card = btn.closest(".my-recipe-card");
+      const id = card.dataset.recipeId;
+      if (!confirm("Delete this recipe?")) return;
+      const res = await fetch(`/api/recipes/${id}`, { method: "DELETE" });
+      if (res.ok) card.remove();
+    });
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   initStudio();
   initGallery();
+  initProfile();
 });

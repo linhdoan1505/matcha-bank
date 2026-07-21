@@ -1,0 +1,35 @@
+  <nav class="navbar">
+    <div class="brand"><span class="logo-dot"></span> Matcha Bar Studio</div>
+    <div class="nav-links">
+      <a href="{{ url_for('index') }}" class="{{ 'active' if request.endpoint == 'index' }}">Home</a>
+      <a href="{{ url_for('studio') }}" class="{{ 'active' if request.endpoint == 'studio' }}">Studio</a>
+      <a href="{{ url_for('gallery') }}" class="{{ 'active' if request.endpoint == 'gallery' }}">Gallery</a>
+      <a href="{{ url_for('profile') }}" class="{{ 'active' if request.endpoint == 'profile' }}">Profile</a>
+    </div>
+    <div class="nav-right">
+      {% if current_user.is_authenticated %}
+        <a href="{{ url_for('profile') }}" class="nav-user">
+          {% if current_user.avatar_url %}
+            <img src="{{ current_user.avatar_url }}" class="nav-avatar" alt="">
+          {% else %}
+            <span class="nav-avatar nav-avatar-fallback">{{ current_user.name[:1]|upper }}</span>
+          {% endif %}
+          <span>{{ current_user.name }}</span>
+        </a>
+        <a href="{{ url_for('logout') }}" class="btn btn-outline">Log out</a>
+      {% else %}
+        <a href="{{ url_for('login') }}" class="btn btn-outline">Log in</a>
+      {% endif %}
+      <a href="{{ url_for('studio') }}" class="btn btn-primary">Start Mixing</a>
+    </div>
+  </nav>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-stack">
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
