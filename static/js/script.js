@@ -35,15 +35,48 @@ const INGREDIENTS = {
 };
 
 // ---- Studio page logic ----
+const BASE_LIQUID_COLORS = {
+  "Ceremonial Matcha": [91, 127, 58],
+  "Culinary Matcha": [79, 122, 46],
+  "Houjicha": [138, 90, 52],
+};
+const FRUIT_TINTS = {
+  "Strawberry": [214, 60, 90],
+  "Mango": [255, 170, 40],
+  "Lychee": [255, 200, 210],
+};
+const DEFAULT_LIQUID_COLOR = [206, 222, 190];
+
+function computeLiquidColor(cup) {
+  const base = [...cup].reverse().find(i => i.cat === "base");
+  let rgb = base ? (BASE_LIQUID_COLORS[base.name] || [122, 166, 90]) : DEFAULT_LIQUID_COLOR;
+  rgb = [...rgb];
+  const milkCount = cup.filter(i => i.cat === "milk").length;
+  for (let n = 0; n < milkCount; n++) rgb = rgb.map(c => c + (255 - c) * 0.22);
+  cup.filter(i => i.cat === "fruit").forEach(f => {
+    const fc = FRUIT_TINTS[f.name];
+    if (fc) rgb = rgb.map((c, idx) => c * 0.85 + fc[idx] * 0.15);
+  });
+  return rgb.map(c => Math.round(Math.min(255, c)));
+}
+
+function shade(rgb, factor) {
+  return rgb.map(c => Math.round(Math.max(0, Math.min(255, c * factor))));
+}
+
 function initStudio() {
   const list = document.getElementById("ingredientList");
   if (!list) return;
   const tabs = document.getElementById("categoryTabs");
   const cupDrop = document.getElementById("cupDrop");
+  const cupLiquid = document.getElementById("cupLiquid");
+  const foamCap = document.getElementById("foamCap");
+  const mixIns = document.getElementById("mixIns");
   const cupEmpty = document.getElementById("cupEmpty");
   const notesBox = document.getElementById("baristaNotes");
   const ingredientCount = document.getElementById("ingredientCount");
   const creationName = document.getElementById("creationName");
+  const recipeList = document.getElementById("cupRecipeList");
 
   let currentCat = "base";
   let cup = []; // { name, icon, sweet, caff, earth, notes, tags, cat }
@@ -77,6 +110,7 @@ function initStudio() {
   function addToCup(ing) {
     cup.push(ing);
     renderCup();
+    playPourAnimation(ing);
   }
 
   function removeFromCup(index) {
@@ -84,17 +118,73 @@ function initStudio() {
     renderCup();
   }
 
+  function playPourAnimation(ing) {
+    const drop = document.createElement("div");
+    drop.className = "pour-drop";
+    drop.textContent = ing.icon;
+    cupDrop.appendChild(drop);
+    drop.addEventListener("animationend", () => drop.remove());
+    cupDrop.classList.add("splash");
+    setTimeout(() => cupDrop.classList.remove("splash"), 400);
+  }
+
+  function renderMixIns(cup) {
+    mixIns.innerHTML = "";
+    const iceCount = cup.filter(i => i.cat === "ice").length;
+    const bobaCount = cup.filter(i => i.name === "Boba Pearls").length;
+    const fruitItems = cup.filter(i => i.cat === "fruit");
+
+    for (let n = 0; n < iceCount * 4; n++) {
+      const cube = document.createElement("div");
+      cube.className = "ice-cube";
+      cube.style.left = `${10 + Math.random() * 70}%`;
+      cube.style.top = `${8 + Math.random() * 45}%`;
+      cube.style.animationDelay = `${(Math.random() * 2).toFixed(2)}s`;
+      mixIns.appendChild(cube);
+    }
+    for (let n = 0; n < bobaCount * 8; n++) {
+      const pearl = document.createElement("div");
+      pearl.className = "boba-pearl";
+      pearl.style.left = `${8 + Math.random() * 80}%`;
+      pearl.style.bottom = `${2 + Math.random() * 12}%`;
+      mixIns.appendChild(pearl);
+    }
+    fruitItems.forEach(f => {
+      for (let n = 0; n < 3; n++) {
+        const chunk = document.createElement("div");
+        chunk.className = "fruit-chunk";
+        chunk.textContent = f.icon;
+        chunk.style.left = `${10 + Math.random() * 75}%`;
+        chunk.style.top = `${15 + Math.random() * 55}%`;
+        chunk.style.animationDelay = `${(Math.random() * 3).toFixed(2)}s`;
+        mixIns.appendChild(chunk);
+      }
+    });
+  }
+
   function renderCup() {
     cupEmpty.style.display = cup.length ? "none" : "block";
     ingredientCount.textContent = cup.length ? `${cup.length} ingredient${cup.length > 1 ? "s" : ""} added` : "Empty";
 
-    [...cupDrop.querySelectorAll(".cup-layer")].forEach(n => n.remove());
+    const liquidHeight = cup.length ? Math.min(92, 18 + cup.length * 11) : 0;
+    const rgb = computeLiquidColor(cup);
+    cupLiquid.style.height = `${liquidHeight}%`;
+    cupLiquid.style.background = cup.length
+      ? `linear-gradient(180deg, rgb(${shade(rgb, 1.12).join(",")}), rgb(${shade(rgb, 0.85).join(",")}))`
+      : "transparent";
+
+    const foamHeight = cup.some(i => i.name === "Cold Foam") ? 20 : 0;
+    foamCap.style.height = `${foamHeight}px`;
+
+    renderMixIns(cup);
+
+    recipeList.innerHTML = "";
     cup.forEach((ing, i) => {
-      const layer = document.createElement("div");
-      layer.className = "cup-layer";
-      layer.innerHTML = `<span>${ing.icon} ${ing.name}</span><button title="remove">✕</button>`;
-      layer.querySelector("button").addEventListener("click", () => removeFromCup(i));
-      cupDrop.appendChild(layer);
+      const chip = document.createElement("span");
+      chip.className = "cup-recipe-chip";
+      chip.innerHTML = `${ing.icon} ${ing.name} <button title="remove">✕</button>`;
+      chip.querySelector("button").addEventListener("click", () => removeFromCup(i));
+      recipeList.appendChild(chip);
     });
 
     const sweet = cup.reduce((s, i) => s + i.sweet, 0);
