@@ -4,9 +4,9 @@ welcome to your lil corner of the internet where matcha is a personality trait a
 
 ## the tea (well, matcha)
 
-- 🧪 **Studio** — drag ingredients into your cup and watch your drink come together IRL (well, on screen)
-- 📊 **Drink Profile** — sweetness, caffeine, earthiness meters bc balance is everything
-- 🖼️ **Gallery** — save your creations, remix your besties' recipes, get your flowers (♥s)
+- (*ˊᗜˋ*) **Studio** — drag ingredients into your cup and watch your drink come together IRL (well, on screen)
+- (ᵔᵕᵔ) **Drink Profile** — sweetness, caffeine, earthiness meters bc balance is everything
+- ₍ᐢ.ˬ.ᐢ₎ **Gallery** — save your creations, remix your besties' recipes, get your flowers (♥s)
 - 🌸 built with Flask bc even the backend deserves to be cute
 
 ## running it locally
