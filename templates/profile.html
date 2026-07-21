@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profile · Matcha Bar Studio</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="page">
+  {% include "_navbar.html" %}
+
+  <div class="profile-hero">
+    {% if current_user.avatar_url %}
+      <img src="{{ current_user.avatar_url }}" class="avatar" style="object-fit:cover;" alt="">
+    {% else %}
+      <div class="avatar">{{ current_user.name[:1]|upper }}</div>
+    {% endif %}
+    <div>
+      <div style="font-size:0.75rem; opacity:0.8;">PROFILE</div>
+      <h2 style="margin:2px 0;">{{ current_user.name }}</h2>
+      <div style="font-size:0.85rem; opacity:0.9;">{{ current_user.email }} · joined via {{ current_user.provider|capitalize }}</div>
+    </div>
+    <div class="stats">
+      <div><strong>{{ recipes|length }}</strong><span>Recipes</span></div>
+    </div>
+  </div>
+
+  <section class="block" style="border-top:none;">
+    <div class="section-head">
+      <h3 style="margin:0;">My Creations</h3>
+      <a href="{{ url_for('studio') }}">Create new →</a>
+    </div>
+
+    {% if recipes %}
+      <div class="recipe-grid">
+        {% for recipe in recipes %}
+          <article class="recipe-card my-recipe-card" data-recipe-id="{{ recipe.id }}">
+            <button class="delete-recipe" title="Delete">✕</button>
+            <div class="thumb"><span class="tag">{{ recipe.ingredients|length }} ingredients</span></div>
+            <div class="body">
+              <h4>{{ recipe.name }}</h4>
+              <div class="meter-row">Caffeine <div class="meter-track"><div class="meter-fill" style="width:{{ (recipe.caffeine / 20 * 100)|round|int }}%"></div></div></div>
+              <div class="meter-row">Sweetness <div class="meter-track"><div class="meter-fill" style="width:{{ (recipe.sweetness / 20 * 100)|round|int }}%"></div></div></div>
+              <div class="recipe-footer">
+                <span>{{ recipe.ingredients | map(attribute='icon') | join(' ') }}</span>
+              </div>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <div style="font-size:2rem;">🍵</div>
+        <p>You haven't saved any creations yet.</p>
+        <a href="{{ url_for('studio') }}" class="btn btn-primary">Open the Studio →</a>
+      </div>
+    {% endif %}
+  </section>
+</div>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

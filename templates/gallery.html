@@ -9,16 +9,7 @@
 <body>
 
 <div class="page">
-  <nav class="navbar">
-    <div class="brand"><span class="logo-dot"></span> Matcha Bar Studio</div>
-    <div class="nav-links">
-      <a href="{{ url_for('index') }}">Home</a>
-      <a href="{{ url_for('studio') }}">Studio</a>
-      <a href="{{ url_for('gallery') }}" class="active">Gallery</a>
-      <a href="{{ url_for('gallery') }}">Profile</a>
-    </div>
-    <a href="{{ url_for('studio') }}" class="btn btn-primary">Start Mixing</a>
-  </nav>
+  {% include "_navbar.html" %}
 
   <div class="profile-hero">
     <div class="avatar">🌸</div>

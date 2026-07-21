@@ -90,6 +90,78 @@ a { text-decoration: none; color: inherit; }
 .btn-secondary { background: var(--cream); color: var(--text-dark); }
 .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-dark); }
 
+.nav-right { display: flex; align-items: center; gap: 10px; }
+.nav-user { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; font-weight: 600; padding: 4px 10px 4px 4px; border-radius: 999px; }
+.nav-user:hover { background: var(--cream); }
+.nav-avatar { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; }
+.nav-avatar-fallback { display: flex; align-items: center; justify-content: center; background: var(--green); color: white; font-size: 0.8rem; }
+
+.flash-stack { padding: 0 32px; margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+.flash { padding: 10px 16px; border-radius: 10px; font-size: 0.85rem; }
+.flash-error { background: #fbe4e0; color: #9a3b2a; }
+.flash-success { background: #e2f0da; color: var(--green-dark); }
+
+/* Auth pages */
+.auth-wrap { display: flex; justify-content: center; padding: 40px 24px 60px; }
+.auth-card { width: 100%; max-width: 380px; }
+.auth-card h1 { font-size: 1.6rem; margin: 0 0 4px; text-align: center; }
+.auth-card .subhead { color: var(--text-muted); text-align: center; margin: 0 0 24px; font-size: 0.9rem; }
+
+.oauth-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 11px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--cream-light);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+.oauth-btn:hover { background: var(--cream); }
+.oauth-btn.disabled { opacity: 0.5; cursor: not-allowed; }
+.oauth-btn .icon { font-size: 1.05rem; }
+
+.auth-divider { display: flex; align-items: center; gap: 12px; color: var(--text-muted); font-size: 0.78rem; margin: 18px 0; }
+.auth-divider::before, .auth-divider::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+
+.form-field { margin-bottom: 14px; }
+.form-field label { display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 6px; }
+.form-field input {
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--cream-light);
+  font-size: 0.9rem;
+}
+.form-field input:focus { outline: 2px solid var(--green); outline-offset: 1px; }
+
+.auth-card .btn-primary { width: 100%; margin-top: 6px; }
+.auth-switch { text-align: center; font-size: 0.85rem; color: var(--text-muted); margin-top: 18px; }
+.auth-switch a { color: var(--green-dark); font-weight: 600; }
+
+/* Profile page */
+.my-recipe-card { position: relative; }
+.my-recipe-card .delete-recipe {
+  position: absolute;
+  top: 10px; right: 10px;
+  z-index: 2;
+  width: 26px; height: 26px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.85);
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+.my-recipe-card .delete-recipe:hover { background: #fbe4e0; color: #9a3b2a; }
+.empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
+.empty-state .btn { margin-top: 14px; }
+
 /* Hero */
 .hero {
   display: grid;

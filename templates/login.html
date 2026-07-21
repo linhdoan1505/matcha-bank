@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Log In · Matcha Bar Studio</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="page">
+  {% include "_navbar.html" %}
+
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <h1>Welcome back</h1>
+      <p class="subhead">Log in to save recipes and build your matcha profile.</p>
+
+      {% if google_enabled %}
+        <a href="{{ url_for('login_google') }}" class="oauth-btn"><span class="icon">🔴</span> Continue with Google</a>
+      {% else %}
+        <span class="oauth-btn disabled" title="Ask the site owner to configure GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET"><span class="icon">🔴</span> Continue with Google</span>
+      {% endif %}
+
+      {% if apple_enabled %}
+        <a href="{{ url_for('login_apple') }}" class="oauth-btn"><span class="icon">🍎</span> Continue with Apple</a>
+      {% else %}
+        <span class="oauth-btn disabled" title="Ask the site owner to configure APPLE_CLIENT_ID / APPLE_TEAM_ID / APPLE_KEY_ID / APPLE_PRIVATE_KEY"><span class="icon">🍎</span> Continue with Apple</span>
+      {% endif %}
+
+      <div class="auth-divider">or with email</div>
+
+      <form method="POST" action="{{ url_for('login') }}">
+        <div class="form-field">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" value="{{ email or '' }}" required autocomplete="email">
+        </div>
+        <div class="form-field">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required autocomplete="current-password">
+        </div>
+        <button type="submit" class="btn btn-primary">Log in</button>
+      </form>
+
+      <p class="auth-switch">New here? <a href="{{ url_for('signup') }}">Create an account</a></p>
+    </div>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
