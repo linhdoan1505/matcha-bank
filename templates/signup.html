@@ -22,12 +22,6 @@
         <span class="oauth-btn disabled" title="Ask the site owner to configure GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET"><span class="icon">🔴</span> Continue with Google</span>
       {% endif %}
 
-      {% if apple_enabled %}
-        <a href="{{ url_for('login_apple') }}" class="oauth-btn"><span class="icon">🍎</span> Continue with Apple</a>
-      {% else %}
-        <span class="oauth-btn disabled" title="Ask the site owner to configure APPLE_CLIENT_ID / APPLE_TEAM_ID / APPLE_KEY_ID / APPLE_PRIVATE_KEY"><span class="icon">🍎</span> Continue with Apple</span>
-      {% endif %}
-
       <div class="auth-divider">or with email</div>
 
       <form method="POST" action="{{ url_for('signup') }}">
