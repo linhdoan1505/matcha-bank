@@ -255,9 +255,14 @@ section.block { padding: 32px; border-top: 1px solid var(--border); }
 
 .recipe-card .thumb {
   height: 120px;
-  background: linear-gradient(160deg, #6f8f4f, #3d5c2e);
+  background: linear-gradient(160deg, #ede4d3, #ddd0b8);
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
+.thumb-cup { width: 76px; height: 76px; filter: drop-shadow(0 3px 4px rgba(0,0,0,0.15)); }
 
 .recipe-card .thumb .tag {
   position: absolute;
@@ -312,6 +317,12 @@ section.block { padding: 32px; border-top: 1px solid var(--border); }
   cursor: pointer;
 }
 .category-tabs button.active { background: var(--green-dark); color: white; border-color: var(--green-dark); }
+.category-tabs button[data-cat="milk"].active {
+  background: #ffffff;
+  color: var(--text-dark);
+  border-color: var(--text-dark);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+}
 
 .ingredient-list { display: flex; flex-direction: column; gap: 8px; }
 .ingredient-item {

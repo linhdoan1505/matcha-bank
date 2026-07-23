@@ -64,6 +64,56 @@ function shade(rgb, factor) {
   return rgb.map(c => Math.round(Math.max(0, Math.min(255, c * factor))));
 }
 
+function hexToRgb(hex) {
+  const h = hex.replace("#", "");
+  const full = h.length === 3 ? h.split("").map(c => c + c).join("") : h;
+  const n = parseInt(full, 16);
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+}
+
+// Renders a small illustrated matcha cup used as a recipe thumbnail,
+// matching the Studio's game-cup look so every recipe gets its own "photo".
+function cupThumbSVG(color, opts = {}) {
+  const { foam = false, boba = false, ice = false, fruitEmoji = null } = opts;
+  const rgb = typeof color === "string" ? hexToRgb(color) : color;
+  const top = shade(rgb, 1.18);
+  const bottom = shade(rgb, 0.82);
+  const uid = Math.random().toString(36).slice(2, 8);
+  return `
+    <svg viewBox="0 0 140 140" class="thumb-cup" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+      <defs>
+        <linearGradient id="liq-${uid}" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="rgb(${top.join(",")})"/>
+          <stop offset="100%" stop-color="rgb(${bottom.join(",")})"/>
+        </linearGradient>
+      </defs>
+      <rect x="88" y="2" width="9" height="30" rx="4" fill="#e85c7a" transform="rotate(12 92 17)"/>
+      <polygon points="26,18 114,18 102,128 38,128" fill="url(#liq-${uid})"/>
+      <polygon points="26,18 114,18 102,128 38,128" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
+      ${ice ? `<rect x="52" y="36" width="13" height="13" rx="3" fill="rgba(255,255,255,0.85)" transform="rotate(12 58 42)"/><rect x="74" y="52" width="11" height="11" rx="3" fill="rgba(255,255,255,0.8)" transform="rotate(-10 80 57)"/>` : ""}
+      ${boba ? `<circle cx="50" cy="114" r="5" fill="#2a1a12"/><circle cx="65" cy="120" r="5" fill="#2a1a12"/><circle cx="80" cy="113" r="5" fill="#2a1a12"/><circle cx="92" cy="119" r="5" fill="#2a1a12"/>` : ""}
+      ${fruitEmoji ? `<text x="70" y="82" font-size="26" text-anchor="middle">${fruitEmoji}</text>` : ""}
+      ${foam ? `<ellipse cx="70" cy="20" rx="45" ry="11" fill="#fbf7ee"/>` : ""}
+      <rect x="20" y="8" width="100" height="14" rx="6" fill="#ffffff" opacity="0.95"/>
+    </svg>
+  `;
+}
+
+function cupOptsFromChips(chips) {
+  const text = chips.join(" ").toLowerCase();
+  const fruitMap = { strawberry: "🍓", mango: "🥭", lychee: "🍈", yuzu: "🍋", coconut: "🥥" };
+  let fruitEmoji = null;
+  for (const [key, emoji] of Object.entries(fruitMap)) {
+    if (text.includes(key)) { fruitEmoji = emoji; break; }
+  }
+  return {
+    foam: text.includes("foam"),
+    boba: text.includes("boba"),
+    ice: text.includes("ice"),
+    fruitEmoji,
+  };
+}
+
 function initStudio() {
   const list = document.getElementById("ingredientList");
   if (!list) return;
@@ -298,7 +348,7 @@ function initGallery() {
 
   grid.innerHTML = recipes.map(r => `
     <article class="recipe-card">
-      <div class="thumb" style="background:linear-gradient(160deg, ${r.color}aa, ${r.color});"><span class="tag">${r.tag}</span></div>
+      <div class="thumb">${cupThumbSVG(r.color, cupOptsFromChips(r.chips))}<span class="tag">${r.tag}</span></div>
       <div class="body">
         <div class="handle">${r.handle}</div>
         <h4>${r.name}</h4>
@@ -308,6 +358,19 @@ function initGallery() {
       </div>
     </article>
   `).join("");
+}
+
+// ---- Homepage trending cards ----
+function initTrending() {
+  document.querySelectorAll(".thumb[data-cup-color]").forEach(el => {
+    const opts = {
+      foam: el.dataset.cupFoam === "1",
+      boba: el.dataset.cupBoba === "1",
+      ice: el.dataset.cupIce === "1",
+      fruitEmoji: el.dataset.cupFruit || null,
+    };
+    el.insertAdjacentHTML("afterbegin", cupThumbSVG(el.dataset.cupColor, opts));
+  });
 }
 
 // ---- Profile page logic ----
@@ -326,5 +389,6 @@ function initProfile() {
 document.addEventListener("DOMContentLoaded", () => {
   initStudio();
   initGallery();
+  initTrending();
   initProfile();
 });
