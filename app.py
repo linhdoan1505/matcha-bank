@@ -7,6 +7,7 @@ from flask_login import current_user, login_required, login_user, logout_user
 
 from extensions import db, login_manager, oauth
 from models import SavedRecipe, User
+from thumbs import build_cup_thumb_svg
 
 load_dotenv()
 
@@ -170,9 +171,10 @@ def auth_google_callback():
 @app.route("/profile")
 @login_required
 def profile():
-    recipes = [
-        {**r.__dict__, "ingredients": json.loads(r.ingredients_json)} for r in current_user.recipes
-    ]
+    recipes = []
+    for r in current_user.recipes:
+        ingredients = json.loads(r.ingredients_json)
+        recipes.append({**r.__dict__, "ingredients": ingredients, "thumb_svg": build_cup_thumb_svg(ingredients)})
     return render_template("profile.html", recipes=recipes)
 
 

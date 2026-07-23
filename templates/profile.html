@@ -38,7 +38,7 @@
         {% for recipe in recipes %}
           <article class="recipe-card my-recipe-card" data-recipe-id="{{ recipe.id }}">
             <button class="delete-recipe" title="Delete">✕</button>
-            <div class="thumb"><span class="tag">{{ recipe.ingredients|length }} ingredients</span></div>
+            <div class="thumb">{{ recipe.thumb_svg|safe }}<span class="tag">{{ recipe.ingredients|length }} ingredients</span></div>
             <div class="body">
               <h4>{{ recipe.name }}</h4>
               <div class="meter-row">Caffeine <div class="meter-track"><div class="meter-fill" style="width:{{ (recipe.caffeine / 20 * 100)|round|int }}%"></div></div></div>

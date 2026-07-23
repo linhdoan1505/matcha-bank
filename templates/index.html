@@ -17,8 +17,8 @@
       <h1>Craft your <em>perfect matcha</em> moment.</h1>
       <p>Blend ceremonial-grade matcha with syrups, milks, and toppings in a cozy virtual café. Save your recipes. Share with the community.</p>
       <div class="hero-actions">
-        <a href="studio.html" class="btn btn-primary">Start Mixing →</a>
-        <a href="gallery.html" class="btn btn-secondary">Browse Recipes</a>
+        <a href="{{ url_for('studio') }}" class="btn btn-primary">Start Mixing →</a>
+        <a href="{{ url_for('gallery') }}" class="btn btn-secondary">Browse Recipes</a>
       </div>
       <div class="hero-stats">
         <span>👥 <strong>42K+</strong> Creators</span>
@@ -47,7 +47,7 @@
     </div>
     <div class="recipe-grid">
       <article class="recipe-card">
-        <div class="thumb"><span class="tag">Trending</span></div>
+        <div class="thumb" data-cup-color="#3d5c2e" data-cup-boba="1"><span class="tag">Trending</span></div>
         <div class="body">
           <div class="handle">🌸 @yuki_brews</div>
           <h4>Brown Sugar Matcha</h4>
@@ -57,7 +57,7 @@
         </div>
       </article>
       <article class="recipe-card">
-        <div class="thumb" style="background:linear-gradient(160deg,#f2e6a0,#c9a227);"><span class="tag">Citrus</span></div>
+        <div class="thumb" data-cup-color="#c9a227" data-cup-fruit="🍋"><span class="tag">Citrus</span></div>
         <div class="body">
           <div class="handle">🍋 @matchamaestro</div>
           <h4>Yuzu Citrus Matcha</h4>
@@ -67,7 +67,7 @@
         </div>
       </article>
       <article class="recipe-card">
-        <div class="thumb" style="background:linear-gradient(160deg,#8a6a4a,#5a3f27);"><span class="tag">Roasted</span></div>
+        <div class="thumb" data-cup-color="#5a3f27" data-cup-foam="1"><span class="tag">Roasted</span></div>
         <div class="body">
           <div class="handle">🍡 @tokyocafegirl</div>
           <h4>Houjicha Toffee Latte</h4>
@@ -77,7 +77,7 @@
         </div>
       </article>
       <article class="recipe-card">
-        <div class="thumb" style="background:linear-gradient(160deg,#d7e29b,#8fae4d);"><span class="tag">Tropical</span></div>
+        <div class="thumb" data-cup-color="#8fae4d" data-cup-fruit="🥥" data-cup-foam="1"><span class="tag">Tropical</span></div>
         <div class="body">
           <div class="handle">☁️ @cloudcafe.jp</div>
           <h4>Matcha Coconut Cloud</h4>
