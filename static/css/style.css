@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&display=swap');
+
 :root {
   --green-dark: #2f4a34;
   --green: #3f6b47;
@@ -8,6 +10,12 @@
   --text-muted: #6b6459;
   --border: #e3dccf;
   --radius: 14px;
+
+  --wood: #c8935f;
+  --wood-dark: #9c6a3e;
+  --wood-darker: #7a4f2c;
+  --paper: #fbf3e3;
+  --torii-red: #c0533f;
 }
 
 * { box-sizing: border-box; }
@@ -294,64 +302,134 @@ section.block { padding: 32px; border-top: 1px solid var(--border); }
 .steps-cta { text-align: center; margin-top: 28px; }
 
 /* Studio */
-.studio-header { display: flex; justify-content: space-between; align-items: center; padding: 24px 32px 0; }
+.studio-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 24px 32px 0;
+  font-family: 'Baloo 2', -apple-system, sans-serif;
+  position: relative;
+}
+.studio-header h2 { font-family: 'Baloo 2', sans-serif; font-weight: 800; letter-spacing: 0.01em; }
+.studio-header h2::before { content: "🍡 "; }
 .studio-header p { color: var(--text-muted); margin: 4px 0 0; }
 .studio-actions { display: flex; gap: 10px; }
 
 .studio-grid {
+  position: relative;
   display: grid;
   grid-template-columns: 260px 1fr 280px;
   gap: 20px;
-  padding: 24px 32px 40px;
+  padding: 28px 32px 40px;
+  margin: 20px 32px 0;
+  border-radius: 20px;
+  background:
+    repeating-linear-gradient(90deg, rgba(255,255,255,0.05) 0 2px, transparent 2px 46px),
+    linear-gradient(180deg, var(--wood) 0%, var(--wood-dark) 100%);
+  box-shadow: inset 0 0 0 6px rgba(122,79,44,0.35), 0 8px 20px rgba(122,79,44,0.25);
+  overflow: hidden;
 }
 
-.panel-title { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 10px; }
+/* falling sakura petals for matcha-cafe-game atmosphere */
+.studio-grid::before,
+.studio-grid::after {
+  content: "🌸";
+  position: absolute;
+  top: -10%;
+  font-size: 1.1rem;
+  opacity: 0.85;
+  animation: petalFall 9s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+.studio-grid::before { left: 8%; animation-delay: 0s; }
+.studio-grid::after { left: 55%; font-size: 0.9rem; animation-delay: 3.5s; }
+@keyframes petalFall {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.9; }
+  100% { transform: translateY(560px) rotate(220deg); opacity: 0; }
+}
+
+.studio-grid > div { position: relative; z-index: 1; }
+
+.panel-title {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--paper);
+  margin-bottom: 10px;
+  display: inline-block;
+  background: var(--wood-darker);
+  padding: 5px 14px;
+  border-radius: 999px 999px 6px 6px;
+  box-shadow: 0 2px 0 rgba(0,0,0,0.15);
+}
 
 .category-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
 .category-tabs button {
-  border: 1px solid var(--border);
-  background: var(--cream-light);
-  border-radius: 999px;
-  padding: 6px 12px;
+  border: none;
+  border-bottom: 3px solid rgba(0,0,0,0.15);
+  background: var(--paper);
+  color: var(--text-dark);
+  border-radius: 12px;
+  padding: 7px 12px;
   font-size: 0.78rem;
+  font-weight: 600;
   cursor: pointer;
+  transition: transform 0.12s ease;
 }
-.category-tabs button.active { background: var(--green-dark); color: white; border-color: var(--green-dark); }
+.category-tabs button:hover { transform: translateY(-1px); }
+.category-tabs button.active { background: var(--green-dark); color: white; border-bottom-color: rgba(0,0,0,0.3); }
 .category-tabs button[data-cat="milk"].active {
   background: #ffffff;
   color: var(--text-dark);
-  border-color: var(--text-dark);
   box-shadow: 0 1px 4px rgba(0,0,0,0.12);
 }
 
-.ingredient-list { display: flex; flex-direction: column; gap: 8px; }
+.ingredient-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
 .ingredient-item {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 8px;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 10px 12px;
-  background: var(--cream-light);
+  gap: 6px;
+  text-align: center;
+  border: none;
+  border-radius: 14px;
+  padding: 12px 8px 10px;
+  background: var(--paper);
+  box-shadow: 0 3px 0 rgba(122,79,44,0.35), 0 4px 8px rgba(0,0,0,0.12);
   cursor: grab;
-  font-size: 0.88rem;
-  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.ingredient-item .ing-bowl {
+  width: 40px; height: 40px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem;
+  background: radial-gradient(circle at 35% 30%, #ffffff, #e7dcc7 80%);
+  border-radius: 50%;
+  box-shadow: inset 0 -3px 4px rgba(122,79,44,0.25), 0 1px 2px rgba(0,0,0,0.15);
 }
 .ingredient-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(63,107,71,0.15);
-  border-color: var(--green);
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 5px 0 rgba(122,79,44,0.35), 0 8px 14px rgba(0,0,0,0.18);
 }
 .ingredient-item:active { cursor: grabbing; }
 .ingredient-item.dragging { opacity: 0.4; }
 
 .barista-notes {
   margin-top: 16px;
-  border: 1px solid var(--border);
+  border: none;
   border-radius: 10px;
   padding: 12px;
   font-size: 0.82rem;
-  background: var(--cream);
+  background: var(--paper);
+  box-shadow: 0 3px 0 rgba(122,79,44,0.3);
 }
 .barista-notes h4 { margin: 4px 0; font-size: 0.9rem; }
 .barista-notes .chip { display: inline-block; background: var(--cream-light); border: 1px solid var(--border); border-radius: 999px; padding: 2px 9px; font-size: 0.7rem; margin: 4px 4px 0 0; }
@@ -529,7 +607,14 @@ section.block { padding: 32px; border-top: 1px solid var(--border); }
   width: 60%;
   height: 12px;
   margin: 4px auto 0;
-  background: radial-gradient(ellipse at center, rgba(0,0,0,0.18), transparent 70%);
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0.3), transparent 70%);
+}
+
+.cup-column .panel-title,
+.cup-column .creation-name,
+.cup-column #ingredientCount {
+  position: relative;
+  z-index: 1;
 }
 
 .cup-recipe-list {
