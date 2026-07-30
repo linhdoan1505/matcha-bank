@@ -422,6 +422,74 @@ section.block { padding: 32px; border-top: 1px solid var(--border); }
 .ingredient-item:active { cursor: grabbing; }
 .ingredient-item.dragging { opacity: 0.4; }
 
+.add-ingredient-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin-top: 10px;
+  border: 2px dashed rgba(255,255,255,0.55);
+  border-radius: 14px;
+  padding: 8px 12px;
+  background: rgba(251,243,227,0.15);
+  color: var(--paper);
+  font-weight: 700;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: transform 0.12s ease, background 0.12s ease;
+}
+.add-ingredient-btn:hover { background: rgba(251,243,227,0.28); transform: translateY(-1px); }
+.add-ingredient-btn .ing-bowl {
+  width: 34px; height: 34px;
+  font-size: 1.1rem;
+  background: radial-gradient(circle at 35% 30%, #ffffff, #e7dcc7 80%);
+  color: var(--wood-darker);
+  box-shadow: inset 0 -3px 4px rgba(122,79,44,0.25);
+}
+
+.ingredient-item.custom-ingredient { position: relative; }
+.ingredient-item.custom-ingredient::after {
+  content: "★";
+  position: absolute;
+  top: 4px; right: 6px;
+  font-size: 0.65rem;
+  color: var(--torii-red);
+}
+
+/* Custom ingredient modal */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(36,25,15,0.55);
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  padding: 20px;
+}
+.modal-overlay.open { display: flex; }
+.modal-card {
+  background: var(--paper);
+  border-radius: 18px;
+  padding: 24px;
+  width: 100%;
+  max-width: 420px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.3);
+}
+.modal-card h3 { margin: 0 0 16px; font-family: 'Baloo 2', sans-serif; }
+.modal-row { display: flex; gap: 10px; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 6px; }
+#customIngCat, #customIngSweet, #customIngCaff, #customIngEarth {
+  width: 100%;
+  padding: 9px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--cream-light);
+  font-size: 0.88rem;
+}
+
 .barista-notes {
   margin-top: 16px;
   border: none;

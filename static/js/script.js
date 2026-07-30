@@ -136,7 +136,7 @@ function initStudio() {
     list.innerHTML = "";
     INGREDIENTS[cat].forEach(ing => {
       const el = document.createElement("div");
-      el.className = "ingredient-item";
+      el.className = "ingredient-item" + (ing.custom ? " custom-ingredient" : "");
       el.draggable = true;
       el.innerHTML = `<span class="ing-bowl">${ing.icon}</span><span>${ing.name}</span>`;
       el.addEventListener("dragstart", e => {
@@ -149,6 +149,50 @@ function initStudio() {
       list.appendChild(el);
     });
   }
+
+  // ---- Custom ingredient modal ----
+  const addIngredientBtn = document.getElementById("addIngredientBtn");
+  const customIngModal = document.getElementById("customIngModal");
+  const customIngForm = document.getElementById("customIngForm");
+  const customIngCancel = document.getElementById("customIngCancel");
+  const customIngCat = document.getElementById("customIngCat");
+
+  function openCustomIngModal() {
+    customIngForm.reset();
+    customIngCat.value = currentCat;
+    document.getElementById("customIngIcon").value = "🍵";
+    customIngModal.classList.add("open");
+    document.getElementById("customIngName").focus();
+  }
+  function closeCustomIngModal() {
+    customIngModal.classList.remove("open");
+  }
+
+  addIngredientBtn.addEventListener("click", openCustomIngModal);
+  customIngCancel.addEventListener("click", closeCustomIngModal);
+  customIngModal.addEventListener("click", e => {
+    if (e.target === customIngModal) closeCustomIngModal();
+  });
+
+  customIngForm.addEventListener("submit", e => {
+    e.preventDefault();
+    const cat = customIngCat.value;
+    const icon = document.getElementById("customIngIcon").value.trim() || "🍵";
+    const name = document.getElementById("customIngName").value.trim();
+    if (!name) return;
+    const sweet = parseFloat(document.getElementById("customIngSweet").value) || 0;
+    const caff = parseFloat(document.getElementById("customIngCaff").value) || 0;
+    const earth = parseFloat(document.getElementById("customIngEarth").value) || 0;
+    const notes = document.getElementById("customIngNotes").value.trim() || "A custom ingredient you added yourself.";
+    const tags = document.getElementById("customIngTags").value.split(",").map(t => t.trim()).filter(Boolean);
+
+    const ingredient = { name, icon, sweet, caff, earth, notes, tags: tags.length ? tags : ["Custom"], custom: true };
+    INGREDIENTS[cat].push(ingredient);
+
+    closeCustomIngModal();
+    if (cat === currentCat) renderIngredients(cat);
+    showNotes(ingredient);
+  });
 
   function showNotes(ing) {
     notesBox.innerHTML = `
