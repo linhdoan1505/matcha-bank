@@ -138,7 +138,7 @@ function initStudio() {
       const el = document.createElement("div");
       el.className = "ingredient-item";
       el.draggable = true;
-      el.textContent = `${ing.icon} ${ing.name}`;
+      el.innerHTML = `<span class="ing-bowl">${ing.icon}</span><span>${ing.name}</span>`;
       el.addEventListener("dragstart", e => {
         el.classList.add("dragging");
         e.dataTransfer.setData("text/plain", JSON.stringify({ ...ing, cat }));
