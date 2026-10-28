@@ -9,16 +9,44 @@ welcome to your lil corner of the internet where matcha is a personality trait a
 - 🖼️ **Gallery** — save your creations, remix your besties' recipes, get your flowers (♥s)
 - 🌸 built with Flask bc even the backend deserves to be cute
 
-## running it locally
+## local setup
 
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-python app.py
-```
+1. create and activate your virtual environment
+
+    ```bash
+    python3 -m venv .venv
+    source .venv/bin/activate
+    ```
+
+2. install dependencies
+
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+3. create your local environment file from the example
+
+    ```bash
+    cp .env.example .env
+    ```
+
+4. update `.env` with your own Google OAuth values if you want sign-in enabled
+
+5. start the app
+
+    ```bash
+    python app.py
+    ```
 
 then pull up `http://127.0.0.1:5000` and start mixing 🧋
+
+## environment variables
+
+- `SECRET_KEY` — required for Flask sessions and should be unique in local/dev/prod
+- `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` — optional for Google login
+- `DATABASE_URL` — optional; defaults to a local SQLite file in `instance/matcha.db`
+
+keep `.env` local and do not commit it.
 
 ## the stack
 
